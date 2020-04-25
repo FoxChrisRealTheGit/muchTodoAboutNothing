@@ -4,6 +4,6 @@ export interface APIResponse {
     message?: string
   };
   response?: {
-
-  }
+    ID?: string
+  };
 }

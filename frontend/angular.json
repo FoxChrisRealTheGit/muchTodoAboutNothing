@@ -28,7 +28,8 @@
               "src/styles/holder.scss",
               "src/styles/title.scss",
               "src/styles/utility.scss",
-              "src/styles/variables.scss"
+              "src/styles/variables.scss",
+              "src/styles/button.scss"
             ],
             "scripts": []
           },
@@ -95,7 +96,8 @@
               "src/styles/holder.scss",
               "src/styles/title.scss",
               "src/styles/utility.scss",
-              "src/styles/variables.scss"
+              "src/styles/variables.scss",
+              "src/styles/button.scss"
             ],
             "scripts": []
           }

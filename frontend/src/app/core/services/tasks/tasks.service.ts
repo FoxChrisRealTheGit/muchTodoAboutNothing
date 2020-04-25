@@ -2,11 +2,8 @@
 import { Injectable } from "@angular/core";
 import {
   HttpClient,
-  HttpHeaders,
-  HttpErrorResponse
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { Observable } from "rxjs";
 /* Service imports */
 import { SnackbarService } from "../snackbar/snackbar.service";
 import { FormMakerService } from "../utility/system/form-maker.service";
@@ -22,10 +19,7 @@ import { ENVIRONMENT } from "../../../../environments/environment";
  */
 @Injectable()
 export class TaskService {
-  selfTasks = [];     // global storage item for user Task
   allTasks = [];      // global storage item for all of the Tasks
-  allUserTasks = [];  // global storage item for specific user Task
-  allTopicTasks = []; // global storage item for specific topic Tasks
 
   singleTask;         // global storage for a single Task
 
@@ -66,9 +60,12 @@ export class TaskService {
   Create = (newTask) => {
     // make the body so the backend can parse
     const FORMBODY = this.formmaker.makeForm(newTask);
-    // call the snackBar to update view experience and check for levelup
+    this.allTasks.unshift(newTask);
+    console.log(this.allTasks);
+
     return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/Task`, FORMBODY).subscribe(data => {
-      this.selfTasks.unshift(data.response);
+      this.allTasks[0].ID = data.response.ID;
+      this.snackBar.GeneralMessageSnack("Successfully made task!");
     });
   } // end of PostTask
 
@@ -80,7 +77,7 @@ export class TaskService {
    */
   Update = (id, Task): Observable<void> => {
     this.snackBar.GeneralMessageSnack("Task has been edited!");
-    return this.http.put<void>(`${ENVIRONMENT.apiUrl}/Task/single/${id}`, Task);
+    return this.http.put<void>(`${ENVIRONMENT.apiUrl}/task/${id}`, Task);
   } // end of PutTask
 
 
@@ -88,16 +85,13 @@ export class TaskService {
    * DELETE One Task
    * @param TaskID : number - the id of the Task
    */
-  Delete = (TaskID: number): Observable<void> => {
+  Delete = (TaskID: number, index): Observable<void> => {
+    console.log(index)
+    this.allTasks.splice(index, 1);
     this.snackBar.GeneralMessageSnack("Task has been deleted!");
-    return this.http.delete<void>(`${ENVIRONMENT.apiUrl}/Task/single/${TaskID}`);
+    return this.http.delete<void>(`${ENVIRONMENT.apiUrl}/task/${TaskID}`);
   } // end of DeleteTask
 
+  /* PUT OTHER METHODS HERE */
 
-  //  private handleHttpError(error: HttpErrorResponse): Observable<IError>{
-  //    let dataError = new IError();
-
-  //    return throwError(dataError)
-  //  }
-
-}
+} // end of Service

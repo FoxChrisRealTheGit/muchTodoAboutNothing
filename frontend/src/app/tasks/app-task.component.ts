@@ -28,11 +28,28 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
-      title: ["", Validators.required],
+      title: ["", [Validators.required, Validators.maxLength(75)]],
     });
   } // end of ngOnInit
 
+  /**
+   *
+   */
+  onHandleSubmit() {
+    const INPUT = {
+      title: this.firstFormGroup.value.title
+    };
+    this.taskService.Create(INPUT);
+    this.firstFormGroup.reset();
+  } // end of onHandleSubmit
 
+  /**
+   *
+   * @param index - the index of the item to delete
+   */
+  onHandleDelete(task, index) {
+    this.taskService.Delete(task, index);
+  } // end of onHandleSubmit
   /* PUT OTHER METHODS HERE*/
 
 } // end of class

@@ -1,16 +1,49 @@
-<h1>Much :TODO About Nothing</h1>
+<h1 class="title title--center">Much @TODO About Nothing</h1>
 
-<div>
-  <input>
-  <button>DO IT!</button>
+<div class="holder holder--center holder--w-500">
+  <form [formGroup]="firstFormGroup" style="width: 100%;">
+    <mat-form-field style="width: 300px;">
+      <input
+        matInput
+        placeholder="Task Title (Required)"
+        formControlName="title"
+        required
+        autocomplete="off"
+        maxlength="75"
+      />
+    </mat-form-field>
+    <button
+      mat-button
+      color="primary"
+      [disabled]="
+    !firstFormGroup.valid"
+      (click)="onHandleSubmit()"
+    >
+      DO IT!
+    </button>
+  </form>
 </div>
 
-<ng-template *ngFor="let task of paginationService.paginate(taskService.allTasks)">
-
-
-</ng-template>
+<ng-container
+  *ngFor="
+    let task of paginationService.paginate(taskService.allTasks);
+    let i = index
+  "
+>
+  <div class="holder holder--center holder--a-center holder--j-center">
+    <mat-checkbox>
+      <h4 class="task__title">{{ task.title }}</h4></mat-checkbox
+    >
+    <button mat-button color="accent" [routerLink]="['/task', task.id]">
+      Edit
+    </button>
+    <button mat-button color="warn" (click)="onHandleDelete(task, i)">
+      Delete
+    </button>
+  </div>
+</ng-container>
 <!-- start of pagination buttons-->
-<nav>
+<nav *ngIf="paginationService.pages.length >= 1">
   <ul class="holder holder--j-center pagination--row">
     <li class="" style="margin-right: 12px;">
       <button
@@ -24,11 +57,13 @@
     <li class="">
       <button
         class="button__pagination--button"
-        (click)="paginationService.page === 1? paginationService.page = 1: paginationService.page =paginationService.page - 1"
+        (click)="
+          paginationService.page === 1
+            ? (paginationService.page = 1)
+            : (paginationService.page = paginationService.page - 1)
+        "
       >
-        <mat-icon
-          class="button__pagination--icon"
-          style="padding-left: 5px;"
+        <mat-icon class="button__pagination--icon" style="padding-left: 5px;"
           >arrow_back_ios</mat-icon
         >
       </button>
@@ -52,10 +87,7 @@
             ),
             math.min(
               paginationService.pages.length,
-              paginationService.page +
-                (paginationService.page <= 1
-                  ? 2
-                  : 1)
+              paginationService.page + (paginationService.page <= 1 ? 2 : 1)
             )
           )
         "
@@ -68,12 +100,14 @@
     <li class="">
       <button
         class="button__pagination--button"
-        (click)="paginationService.page === paginationService.pages.length? paginationService.page = paginationService.pages.length: paginationService.page = paginationService.page + 1"
+        (click)="
+          paginationService.page === paginationService.pages.length
+            ? (paginationService.page = paginationService.pages.length)
+            : (paginationService.page = paginationService.page + 1)
+        "
         style="padding-left: 5px;"
       >
-        <mat-icon class="button__pagination--icon"
-          >arrow_forward_ios</mat-icon
-        >
+        <mat-icon class="button__pagination--icon">arrow_forward_ios</mat-icon>
       </button>
     </li>
     <li class="" style="margin-left: 12px;">
