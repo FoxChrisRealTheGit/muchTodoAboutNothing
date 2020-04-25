@@ -19,10 +19,10 @@ import {
   ModalHandelingService,
   HttpCacheService,
   SnackbarService,
-  AuthGuard,
   PageLoadService,
   PaginationService,
   FormMakerService,
+  TaskService
 } from "./services/index";
 
 /* Interceptor imports */
@@ -36,10 +36,10 @@ import { CacheInterceptor } from "./Interceptors/index";
     ModalHandelingService,
     HttpCacheService,
     SnackbarService,
-    AuthGuard,
     PageLoadService,
     PaginationService,
     FormMakerService,
+    TaskService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true }
   ]
 })
