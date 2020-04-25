@@ -17,8 +17,9 @@ type TaskService interface {
 
 // TaskDB is used to interact with the users database.
 type TaskDB interface {
-	ByUserID(id string) ([]Task, error)
 	ByID(id string) (*Task, error)
+	ByName(name string) ([]Task, error)
+	All() ([]Task, error)
 	Create(team *Task) error
 	Update(team *Task) error
 	Delete(id string) error
@@ -98,21 +99,21 @@ type taskSQL struct {
 //
 // As a general rule, any error but ErrNotFound should
 // probably result in a 500 error.
-func (psql *taskSQL) ByID(id string) (*Task, error) {
+func (tsql *taskSQL) ByID(id string) (*Task, error) {
 	var task Task
 	//do the sql
 	
 	return &task, nil
 }
 
-func (psql *taskSQL) ByName(userID string) ([]Task, error) {
+func (tsql *taskSQL) ByName(name string) ([]Task, error) {
 	var tasks []Task
 	// do the sql
 	
 	return tasks, nil
 }
 
-func (psql *taskSQL) All(userID string) ([]Task, error) {
+func (tsql *taskSQL) All() ([]Task, error) {
 	var tasks []Task
 	// do the sql
 	
@@ -121,17 +122,17 @@ func (psql *taskSQL) All(userID string) ([]Task, error) {
 
 // Create will create the provided team and backfill data
 // like the ID, CreatedAt, and UpdatedAt fields
-func (psql *taskSQL) Create(task *Task) error {
+func (tsql *taskSQL) Create(task *Task) error {
 	return nil
 }
 
 // Update will update the provided team
-func (psql *taskSQL) Update(task *Task) error {
+func (tsql *taskSQL) Update(task *Task) error {
 	return nil
 }
 
 // Delete will delete the provided team
-func (psql *taskSQL) Delete(id string) error {
+func (tsql *taskSQL) Delete(id string) error {
 	// ts.db.exec()
 	return nil
 }
