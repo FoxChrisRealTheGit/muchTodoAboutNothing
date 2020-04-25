@@ -1,0 +1,150 @@
+@import url("./variables.scss");
+.title {
+  font-family: "Muli", sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  margin: 5px;
+  color: var(--text-color);
+  cursor: default;
+}
+
+// h1 {
+//   font-size: 90px;
+//   line-height: 113px;
+//   letter-spacing: -1.5px;
+// }
+
+// h2 {
+//   font-size: 56px;
+//   line-height: 70px;
+//   letter-spacing: -0.5px;
+// }
+
+// h3 {
+//   font-weight: 600;
+//   font-size: 45px;
+//   line-height: 56px;
+// }
+
+// h4 {
+//   font-size: 32px;
+//   line-height: 40px;
+//   letter-spacing: 0.25px;
+// }
+
+// h5 {
+//   font-weight: 600;
+//   font-size: 22px;
+//   line-height: 28px;
+// }
+
+// h6 {
+//   font-size: 19px;
+//   line-height: 24px;
+//   letter-spacing: 0.15px;
+// }
+
+.title--primary {
+  color: var(--color-two);
+}
+
+.title--accent {
+  color: var(--color-three);
+}
+.title--white {
+  color: white;
+  mix-blend-mode: normal;
+}
+.title--black {
+  color: black;
+}
+
+.title--clickable {
+  cursor: pointer;
+}
+
+.title--small-caps {
+  font-variant: small-caps;
+}
+
+.title--center {
+  text-align: center;
+}
+
+.title--danger {
+  color: red;
+}
+
+.title--none-of-something {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: darkgrey;
+  font-size: 2rem;
+}
+
+.title--no-m {
+  margin: 0;
+}
+
+.title--m-b-50 {
+  margin-bottom: 50px;
+}
+
+.title--m-t-10{
+  margin-top: 10px;
+}
+.title--m-t-50 {
+  margin-top: 50px;
+}
+.title--w-30 {
+  width: 30px;
+}
+.title--w-80 {
+  min-width: 80px;
+}
+.title--w-150 {
+  width: 150px;
+}
+
+.title--bold {
+  font-weight: 900;
+}
+
+.title__link:hover {
+  color: var(--color-three);
+  cursor: pointer;
+}
+
+.subtitle {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  /* or 150% */
+  letter-spacing: 0.15px;
+}
+
+.subtitle--small {
+  font-size: 14px;
+  line-height: 24px;
+  /* or 171% */
+}
+
+.subtitle--white {
+  color: rgba(255, 255, 255, 0.7);
+  mix-blend-mode: normal;
+}
+
+.title__thin{
+  font-weight: 300;
+}
+
+
+
+@media screen and (min-width: 700px) {
+}
+
+@media screen and (min-width: 1100px) {
+}

@@ -1,0 +1,85 @@
+.site {
+  min-height: 100vh;
+}
+
+:host {
+  position: relative;
+  min-height: 100%; // used percent instead of vh due to safari bug.
+}
+
+.content {
+  display: flex;
+}
+
+.drawer-stuff{
+  width: 400px;
+  max-width: 400px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+  min-height: 60vh;
+}
+
+.btn__lower-left {
+  position: fixed;
+  bottom: 30px;
+  z-index: 4;
+}
+.btn__lower-left-open {
+  position: fixed;
+  bottom: 30px;
+  left: 375px;
+  z-index: 4;
+}
+.btn__lower-left-two-open {
+  position: fixed;
+  bottom: 150px;
+  left: 375px;
+  z-index: 2;
+}
+mat-drawer {
+  width: 370px;
+}
+
+/* Spinner */
+.spinner {
+  font-size: 300%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  color: #03DAC4;;
+}
+
+.fa-spinner {
+  -webkit-animation: spin 1000ms infinite linear;
+  animation: spin 1000ms infinite linear;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}

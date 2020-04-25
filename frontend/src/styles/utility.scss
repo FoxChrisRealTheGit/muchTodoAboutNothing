@@ -1,0 +1,59 @@
+.grey-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #eee;
+  opacity: 0.6;
+  z-index: 3;
+}
+
+.grey-screen--ulti {
+  z-index: 9000;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.nonsense-space {
+  height: 300px;
+}
+
+.icon {
+  font-size: 3rem;
+  margin: 10px;
+}
+
+.icon__landing{
+  width: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+.divider {
+  width: 100%;
+  height: 250px;
+  background: black;
+  margin: 50px 0;
+}

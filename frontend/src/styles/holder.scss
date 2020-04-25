@@ -1,0 +1,251 @@
+/*
+*   Media Sizes: 700px && 1100px
+*   Items covered:
+*        holder
+*           holder--a-center
+*           holder--j-center
+*           holder--bor-top
+*           holder--dis-col
+*           holder--m-top
+*           holder--footer
+*             holder--footer h6
+*           holder--panel
+*             holder--panel h4
+*             holder--panel h5
+*             holder--panel__section
+*
+*
+*/
+@import url("./variables.scss");
+.holder {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+.holder__cur--pointer {
+  cursor: pointer;
+}
+.holder--full {
+  width: 100%;
+}
+.holder--30 {
+  width: 30%;
+}
+.holder--half {
+  width: 50%;
+}
+
+.holder--60 {
+  width: 60%;
+}
+.holder--80 {
+  width: 80%;
+}
+
+.holder--w-200 {
+  width: 200px;
+}
+
+.holder--w-booklike {
+  width: 1000px;
+}
+.holder--long {
+  width: 100%;
+  border-radius: 20px;
+}
+.holder--rectangle {
+  border-radius: 20px;
+  width: 400px;
+}
+.holder--hover:hover {
+  cursor: pointer;
+  border: 2px solid var(--color-four);
+}
+.holder--center {
+  margin: 0 auto;
+}
+
+.holder--m-10-center {
+  margin: 10px auto;
+}
+.holder--a-center {
+  align-items: center;
+}
+
+.holder--j-center {
+  justify-content: center;
+}
+.holder--j-center__sm {
+  justify-content: center;
+}
+
+.holder--bor-top {
+  border-top: 3px solid var(--color-five);
+}
+.holder--bor-bot {
+  border-bottom: 3px solid var(--color-five);
+}
+.holder--bor {
+  border: 3px solid var(--color-five);
+}
+.holder--bor-left {
+  border-left: 3px solid var(--color-five);
+}
+.holder--dis-col {
+  flex-direction: column;
+}
+
+.holder--m-top {
+  margin-top: 2rem;
+}
+.holder--m-bot {
+  margin-bottom: 2rem;
+}
+.holder--footer {
+  position: relative;
+  bottom: 0;
+  text-align: center;
+  color: white;
+  background: var(--color-two);
+}
+.holder--footer h6 {
+  margin: 0 0 0 5px;
+  display: inline;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+}
+
+.holder--panel {
+  padding: 5px;
+  width: 800px;
+  height: 80px;
+  margin-left: 220px;
+}
+.holder--panel h4,
+.holder--panel h5,
+.holder--panel h6 {
+  margin: 0;
+}
+
+.holder--panel__section {
+  width: 20%;
+}
+.holder--panel__section h6 {
+  font-size: 0.55rem;
+}
+
+.holder__sidebar {
+  flex-direction: column;
+  margin-right: 20px;
+  padding: 20px;
+  width: 100%;
+  border-right: 3px solid var(--color-five);
+  height: 350px;
+}
+
+.holder--w--sidebar {
+  margin-left: 0px;
+}
+
+.holder__item {
+  cursor: pointer;
+  margin-top: 5px;
+  height: 100px;
+  border: 3px solid var(--color-five);
+  border-radius: 20px;
+  transition: linear 0.3s all;
+}
+
+.holder__item:hover {
+  border: 3px solid var(--color-four);
+  transition: linear 0.3s all;
+}
+
+.holder__item__content {
+  width: 600px;
+  border-right: 3px solid var(--color-five);
+  margin-right: 10px;
+}
+.holder--active {
+  border: 3px solid red !important;
+}
+.holder--p-none {
+  padding: 0;
+}
+.holder--p-10 {
+  padding: 10px;
+}
+.holder--no-wrap {
+  flex-wrap: nowrap;
+}
+.holder--p-small {
+  padding: 3px;
+}
+
+.holder--h-500 {
+  height: 500px;
+}
+.holder--h-400 {
+  height: 400px;
+}
+.holder--h-200 {
+  height: 200px;
+}
+
+.holder--fixed {
+  position: fixed;
+}
+
+.holder--sticky-top {
+  position: sticky;
+  top: 0;
+}
+
+.holder--bg-white {
+  background: white;
+}
+
+.holder--over-9000 {
+  z-index: 9000;
+}
+
+.holder--primary {
+  background-color: var(--primary);
+}
+
+.holder__large-only {
+  visibility: hidden;
+  position: absolute;
+}
+@media screen and (min-width: 700px) {
+  .holder__sidebar {
+    position: fixed;
+    flex-direction: column;
+    margin-right: 20px;
+    padding: 20px;
+    width: 200px;
+    border-right: 3px solid var(--color-five);
+    height: 70vh;
+  }
+  .holder--w--sidebar {
+    margin-left: 200px;
+  }
+  .holder--j-center__sm {
+    justify-content: left;
+  }
+  .holder__large-only {
+    visibility: hidden;
+    position: absolute;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  .holder--footer-abs {
+    position: absolute;
+  }
+  .holder__large-only {
+    visibility: visible;
+    position: relative;
+  }
+}

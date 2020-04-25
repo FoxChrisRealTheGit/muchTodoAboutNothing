@@ -1,0 +1,9 @@
+<div class="site">
+  <app-header></app-header>
+  <div *ngIf="loadService.loading">
+    <div class="grey-screen grey-screen--ulti"></div>
+    <span class="fa fa-spinner spinner"></span>
+  </div>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</div>

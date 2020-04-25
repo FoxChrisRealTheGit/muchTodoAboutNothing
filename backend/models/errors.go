@@ -6,15 +6,8 @@ const (
 	// ErrNotFound is returned when a resource cannot be found
 	// in the database
 	ErrNotFound modelError = "models: resource not found"
-	// ErrPasswordIncorrect is returned when an invalid password
-	// is used when attempting to authenticate a user.
-	ErrPasswordIncorrect modelError = "models: incorrect password provided"
-	ErrPasswordTooShort  modelError = "models: password must be at least 12 characters long"
-	ErrPasswordRequired  modelError = "models: password is required"
-	ErrEmailRequired     modelError = "models: Email address is required"
-	ErrEmailInvalid      modelError = "models: Email address is not valid"
-	ErrEmailTaken        modelError = "models: Email address is already taken."
-	ErrTeamTitleRequired modelError = "models: title is required"
+	
+	ErrTaskTitleRequired modelError = "models: title is required"
 
 	// ErrIDInvalid is returned when an invalid ID is provided
 	// to a method like Delete

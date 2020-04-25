@@ -4,98 +4,88 @@ import (
 	"database/sql"
 )
 
-// User represents the team model stored in our database
-type Post struct {
+// Task represents the team model stored in our database
+type Task struct {
 	Title  string `schema:"title"`
-	UserID string `schema:"userid"`
 }
 
-// Teamservice is a set of methods used to manipulate and
+// TaskService is a set of methods used to manipulate and
 // work with the team model
-type PostService interface {
-	PostDB
+type TaskService interface {
+	TaskDB
 }
 
-// TeamDB is used to interact with the users database.
-//
-type PostDB interface {
-	ByUserID(id string) ([]Post, error)
-	ByID(id string) (*Post, error)
-	Create(team *Post) error
-	Update(team *Post) error
+// TaskDB is used to interact with the users database.
+type TaskDB interface {
+	ByUserID(id string) ([]Task, error)
+	ByID(id string) (*Task, error)
+	Create(team *Task) error
+	Update(team *Task) error
 	Delete(id string) error
 }
 
-func NewPostService(db *sql.DB) PostService {
-	return &postService{
-		PostDB: &postValidator{&postSQL{db}},
+// NewTaskService is the service for tasks
+func NewTaskService(db *sql.DB) TaskService {
+	return &taskService{
+		TaskDB: &taskValidator{&taskSQL{db}},
 	}
 }
 
-type postService struct {
-	PostDB
+type taskService struct {
+	TaskDB
 }
 
-type postValidator struct {
-	PostDB
+type taskValidator struct {
+	TaskDB
 }
 
-func (pv *postValidator) Create(p *Post) error {
-	if err := runPostValFuncs(p,
-		pv.userIDRequired,
-		pv.titleRequired); err != nil {
+func (tv *taskValidator) Create(p *Task) error {
+	if err := runTaskValFuncs(p,
+		tv.titleRequired); err != nil {
 		return err
 	}
 
-	return pv.PostDB.Create(p)
+	return tv.TaskDB.Create(p)
 }
 
-func (pv *postValidator) Update(p *Post) error {
-	if err := runPostValFuncs(p,
-		pv.userIDRequired,
-		pv.titleRequired); err != nil {
+func (tv *taskValidator) Update(p *Task) error {
+	if err := runTaskValFuncs(p,
+		tv.titleRequired); err != nil {
 		return err
 	}
 
-	return pv.PostDB.Update(p)
+	return tv.TaskDB.Update(p)
 }
 
 // Delete will delete the user with the provided ID
-func (pv *postValidator) Delete(id string) error {
+func (tv *taskValidator) Delete(id string) error {
 	if id == "" {
 		return ErrIDInvalid
 	}
-	return pv.PostDB.Delete(id)
+	return tv.TaskDB.Delete(id)
 }
 
-func (pv *postValidator) userIDRequired(p *Post) error {
-	if p.UserID == "" {
-		return ErrUserIDRequired
-	}
-	return nil
-}
-
-func (pv *postValidator) titleRequired(p *Post) error {
+func (tv *taskValidator) titleRequired(p *Task) error {
 	if p.Title == "" {
-		return ErrTeamTitleRequired
+		return ErrTaskTitleRequired
 	}
 	return nil
 }
 
-type postValFunc func(*Post) error
+type taskValFunc func(*Task) error
 
-func runPostValFuncs(post *Post, fns ...postValFunc) error {
+func runTaskValFuncs(task *Task, fns ...taskValFunc) error {
 	for _, fn := range fns {
-		if err := fn(post); err != nil {
+		if err := fn(task); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-var _ PostDB = &postSQL{} // safety check
+var _ TaskDB = &taskSQL{} // safety check
 
-type postSQL struct {
+type taskSQL struct {
 	db *sql.DB
 }
 
@@ -108,40 +98,40 @@ type postSQL struct {
 //
 // As a general rule, any error but ErrNotFound should
 // probably result in a 500 error.
-func (psql *postSQL) ByID(id string) (*Post, error) {
-	var post Post
+func (psql *taskSQL) ByID(id string) (*Task, error) {
+	var task Task
 	//do the sql
 	
-	return &post, nil
+	return &task, nil
 }
 
-func (psql *postSQL) ByName(userID string) ([]Post, error) {
-	var posts []Post
+func (psql *taskSQL) ByName(userID string) ([]Task, error) {
+	var tasks []Task
 	// do the sql
 	
-	return posts, nil
+	return tasks, nil
 }
 
-func (psql *postSQL) All(userID string) ([]Post, error) {
-	var posts []Post
+func (psql *taskSQL) All(userID string) ([]Task, error) {
+	var tasks []Task
 	// do the sql
 	
-	return posts, nil
+	return tasks, nil
 }
 
 // Create will create the provided team and backfill data
 // like the ID, CreatedAt, and UpdatedAt fields
-func (psql *postSQL) Create(post *Post) error {
+func (psql *taskSQL) Create(task *Task) error {
 	return nil
 }
 
 // Update will update the provided team
-func (psql *postSQL) Update(post *Post) error {
+func (psql *taskSQL) Update(task *Task) error {
 	return nil
 }
 
 // Delete will delete the provided team
-func (psql *postSQL) Delete(id string) error {
+func (psql *taskSQL) Delete(id string) error {
 	// ts.db.exec()
 	return nil
 }

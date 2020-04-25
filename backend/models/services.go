@@ -7,8 +7,10 @@ import (
 	"log"
 )
 
+// ServicesConfig does stuff
 type ServicesConfig func(*Services) error
 
+// WithPostgres creates the postgres service
 func WithPostgres(dialect string, connectionInfo string) ServicesConfig {
 	return func(s *Services) error {
 		db, err := sql.Open(dialect, connectionInfo)
@@ -19,6 +21,8 @@ func WithPostgres(dialect string, connectionInfo string) ServicesConfig {
 		return nil
 	}
 }
+
+// WithTask creates the task service
 func WithTask() ServicesConfig {
 	return func(s *Services) error {
 		s.Task = NewTaskService(s.db)
@@ -26,6 +30,7 @@ func WithTask() ServicesConfig {
 	}
 }
 
+// NewServices makes a new services
 func NewServices(cfgs ...ServicesConfig) (*Services, error) {
 	var s Services
 	for _, cfg := range cfgs {
@@ -36,6 +41,7 @@ func NewServices(cfgs ...ServicesConfig) (*Services, error) {
 	return &s, nil
 }
 
+// Services is the struct for services
 type Services struct {
 	Task TaskService
 	db   *sql.DB
