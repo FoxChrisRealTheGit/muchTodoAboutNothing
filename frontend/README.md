@@ -3,7 +3,10 @@
 
 # To Run the project
 
-in development when using the backend, run npm run dev.  
+in development when using the backend, run 
+```
+npm run dev.
+```  
 
 
 ## Container
@@ -19,3 +22,4 @@ The repo uses docker containers to build and run the project in a mostly officia
 docker build -f Dockerfile-prod -t example:prod .
 
 docker run -it -p 80:80 --rm example:prod
+
