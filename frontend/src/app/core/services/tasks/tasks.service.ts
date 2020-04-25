@@ -36,7 +36,7 @@ export class TaskService {
    *  it gets all Tasks
    */
   GetAll = () => {
-    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/all-Tasks`).subscribe(data => {
+    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/tasks`).subscribe(data => {
       // this.allTasks = data.response;
     });
   } // end GetAllTasks
@@ -47,7 +47,7 @@ export class TaskService {
    * @param id : number - the id of the Task to get
    */
   FetchByID = (id: number) => {
-    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/Task/single/${id}`).subscribe(data => {
+    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/task/${id}`).subscribe(data => {
       this.singleTask = data.response;
     });
   } // end GetTaskByID
@@ -63,7 +63,8 @@ export class TaskService {
     this.allTasks.unshift(newTask);
     console.log(this.allTasks);
 
-    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/Task`, FORMBODY).subscribe(data => {
+    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/task`, FORMBODY).subscribe(data => {
+      console.log(data.response)
       this.allTasks[0].ID = data.response.ID;
       this.snackBar.GeneralMessageSnack("Successfully made task!");
     });

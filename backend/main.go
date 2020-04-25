@@ -32,7 +32,7 @@ func main() {
 
 	// Toggle these to destroy or rebuild the db!
 	// services.DestructiveReset()
-	// services.AutoMigrate()
+	// services.Rebuilder()
 
 	r := mux.NewRouter()
 	// declare controllers

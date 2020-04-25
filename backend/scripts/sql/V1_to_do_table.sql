@@ -1,8 +1,8 @@
 CREATE TABLE tasks (
-    id PRIMARY KEY,
-    task_name VARCHAR(128),
-    description VARCHAR(2048),
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(75) NOT NULL,
+    info VARCHAR(1024),
+    created_at  TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP,
     completed_at TIMESTAMP,
     done BOOLEAN DEFAULT FALSE,

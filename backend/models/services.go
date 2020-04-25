@@ -70,7 +70,7 @@ func (s *Services) DestructiveReset() error {
 func (s *Services) Rebuilder() error {
 	log.Println("REBUILDING THE TABLES!")
 	// rebuilds tables
-	query, err := ioutil.ReadFile("../scripts/sql/V!_to_do_table.sql")
+	query, err := ioutil.ReadFile("./scripts/sql/V1_to_do_table.sql")
 	if err != nil {
 		panic(err)
 	}

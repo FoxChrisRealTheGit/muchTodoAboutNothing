@@ -20,4 +20,4 @@ refer to the Readme's in the backend and the frontend to run locally
 - build a workout add-on?
   - plan workouts in similiar fashion to todo list
   - utilize metrics in meaningful way
-
+- integrate with CYOG.io

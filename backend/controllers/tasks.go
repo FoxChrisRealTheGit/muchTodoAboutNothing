@@ -41,25 +41,17 @@ type taskForm struct {
 // All is a method
 // Get /tasks
 func (t *Tasks) All(w http.ResponseWriter, r *http.Request) {
-	var form taskForm
-	if err := parseForm(r, &form); err != nil {
-		log.Println(err)
-		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, form)
-		return
-	}
-	task := models.Task{
-		Title: form.Title,
-	}
-	if err := t.ts.Create(&task); err != nil {
+	var tasks []models.Task
+	tasks, err := t.ts.All()
+	if err != nil {
 		// error creating task
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, task)
+		views.SendHeader(w, 500, alert, tasks)
 		return
 	}
 	// success
-	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created task!")
-	views.SendHeader(w, 200, alert, task)
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully found tasks!")
+	views.SendHeader(w, 200, alert, tasks)
 	return
 }
 
