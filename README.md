@@ -9,6 +9,9 @@ refer to the Readme's in the backend and the frontend to run locally
 
 # Still @TODO
 - add unit tests
+- fix the DOCKERFILE's
+- add a buch of k8s' yml just because
+- make docker compose more of a thing with a postgres container
 - fix responsive behavior for below 480px
 - use better code patterns
 - add auth
