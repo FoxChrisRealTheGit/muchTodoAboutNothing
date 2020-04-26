@@ -14,6 +14,10 @@ import (
 )
 
 func main() {
+	var entry string
+	var static string
+	flag.StringVar(&entry, "entry", "./build/index.html", "the entrypoint to serve.")
+	flag.StringVar(&static, "static", "./build", "the directory to serve static files from.")
 	boolPtr := flag.Bool("prod", false, "Provide this flag in production. This ensures that a .config file is provided before the application starts.")
 	flag.Parse()
 	cfg := LoadConfig(*boolPtr)
@@ -40,6 +44,7 @@ func main() {
 
 	// declare middleware
 
+
 	// Task routes
 	r.HandleFunc("/api/tasks", tasksC.All).Methods("GET")
 	r.HandleFunc("/api/task", tasksC.Create).Methods("POST").Name(controllers.TaskCreateName)
@@ -48,7 +53,13 @@ func main() {
 	r.HandleFunc("/api/task/{id}", tasksC.Delete).Methods("DELETE").Name(controllers.TaskDeleteName)
 	r.HandleFunc("/api/task/{id}", tasksC.ByID).Methods("GET")
 	r.HandleFunc("/api/tasks/{name}", tasksC.ByName).Methods("GET")
-	
+
+	if cfg.Env == "prod" {	
+		// Serve static assets directly.
+		r.PathPrefix("/").Handler(http.FileServer(http.Dir(static)))
+		// Catch-all: Serve our JavaScript application's entry-point (index.html).
+		r.PathPrefix("/").HandlerFunc(IndexHandler(entry))
+	}
 
 	// establishes the server contraints and information
 	srv := &http.Server{
@@ -60,4 +71,12 @@ func main() {
 	// runs the server
 	log.Println("Running on port: ", cfg.Port)
 	log.Fatal(srv.ListenAndServe())
+}
+
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+
+	return http.HandlerFunc(fn)
 }
