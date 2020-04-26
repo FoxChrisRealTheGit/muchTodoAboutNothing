@@ -15,10 +15,10 @@ or run:
 go build .
 ```
 
-This project also prefers a running postgres instance. There is a default configuration for a databse; however, it is extremely unlikely that that will work for yourself. To fix this, include a .config file into your build. This config file will also dictate what port and environment the application is running on and should look alot like this:
+This project also prefers a running postgres instance. There is a default configuration for a databse; however, it is extremely unlikely that that will work for yourself. To fix this, include a .config file into your build nested within a config folder. This config file will also dictate what port and environment the application is running on and should look alot like this:
 ```
 {
-  "port": 9000,
+  "port": 3001,
   "env": "dev",
   "database": {
     "host": "localhost",
