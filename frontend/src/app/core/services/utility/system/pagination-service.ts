@@ -20,6 +20,7 @@ export class PaginationService {
     const perPage = this.perPage;
     const from = (page * perPage) - perPage;
     const to = (page * perPage);
+    this.setPages(p);
     return p.slice(from, to);
   } // end of paginate
 

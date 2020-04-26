@@ -5,7 +5,6 @@ import { Routes } from "@angular/router";
 import { TaskComponent, SingleTaskComponent } from "./tasks/index";
 
 /* Guard imports */
-import { AuthGuard } from "./core/services/guards/index";
 
 export const APPROUTES: Routes = [
   { path: "", component: TaskComponent },

@@ -1,87 +1,176 @@
 package controllers
 
 import (
-	"cyog/context"
-	"cyog/models"
-	"cyog/views"
 	"log"
 	"net/http"
+	"strconv"
+	"todo/models"
+	"todo/views"
 
 	"github.com/gorilla/mux"
 )
 
 const (
-	// PostCreateName is the const for the Post Create method
-	PostCreateName = "post_create"
-	// PostUpdateName is the const for the Post Update method
-	PostUpdateName = "post_update"
-	// PostDeleteName is the const for the Post Delete method
-	PostDeleteName = "post_delete"
+	// TaskCreateName is the const for the Task Create method
+	TaskCreateName = "task_create"
+	// TaskUpdateName is the const for the Task Update method
+	TaskUpdateName = "task_update"
+	// TaskDeleteName is the const for the Task Delete method
+	TaskDeleteName = "task_delete"
+	// TaskEditName is the const for the Task Edit method
+	TaskEditName = "task_edit"
 )
 
-// NewPosts is used to create a new Posts controller.
-func NewPosts(ps models.PostService, r *mux.Router) *Posts {
-	return &Posts{
-		ps: ps,
+// NewTasks is used to create a new Tasks controller.
+func NewTasks(ts models.TaskService, r *mux.Router) *Tasks {
+	return &Tasks{
+		ts: ts,
 		r:  r,
 	}
 }
 
-// Posts is the struc for posts
-type Posts struct {
-	ps models.PostService
+// Tasks is the struc for tasks
+type Tasks struct {
+	ts models.TaskService
 	r  *mux.Router
 }
 
-type postForm struct {
+type taskForm struct {
+	ID    string    `schema:"id"`
 	Title string `schema:"title"`
+	Info  string `schema:"info"`
 }
 
+// All is a method
+// Get /tasks
+func (t *Tasks) All(w http.ResponseWriter, r *http.Request) {
+	var tasks []models.Task
+	tasks, err := t.ts.All()
+	if err != nil {
+		// error creating task
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, tasks)
+		return
+	}
+	// success
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully found tasks!")
+	views.SendHeader(w, 200, alert, tasks)
+	return
+}
 
-// Create is a method
-// POST /posts
-func (p *Posts) Create(w http.ResponseWriter, r *http.Request) {
-	var form postForm
+// Edit is a method
+// Get /tasks
+func (t *Tasks) Edit(w http.ResponseWriter, r *http.Request) {
+	var form taskForm
 	if err := parseForm(r, &form); err != nil {
 		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
-	user := context.User(r.Context())
-	if user == nil {
-		// middleware is broken, send headers
-		return
-	}
-	post := models.Post{
+	id, _ := strconv.Atoi(form.ID)
+	task := models.Task{
+		ID:    id,
 		Title: form.Title,
+		Info:  form.Info,
 	}
-	if err := p.ps.Create(&post); err != nil {
-		// error creating post
+	if err := t.ts.Update(&task); err != nil {
+		// error creating task
+		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, post)
+		views.SendHeader(w, 500, alert, task)
 		return
 	}
 	// success
-	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created post!")
-	views.SendHeader(w, 200, alert, post)
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully updated task!")
+	views.SendHeader(w, 200, alert, task)
+	return
+}
+
+// ByID is a method
+// Get /tasks
+func (t *Tasks) ByID(w http.ResponseWriter, r *http.Request) {
+	var form taskForm
+	if err := parseForm(r, &form); err != nil {
+		log.Println(err)
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, form)
+		return
+	}
+	task := models.Task{
+		Title: form.Title,
+	}
+	if err := t.ts.Create(&task); err != nil {
+		// error creating task
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, task)
+		return
+	}
+	// success
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created task!")
+	views.SendHeader(w, 200, alert, task)
+	return
+}
+
+// ByName is a method
+// Get /tasks
+func (t *Tasks) ByName(w http.ResponseWriter, r *http.Request) {
+	var form taskForm
+	if err := parseForm(r, &form); err != nil {
+		log.Println(err)
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, form)
+		return
+	}
+	task := models.Task{
+		Title: form.Title,
+	}
+	if err := t.ts.Create(&task); err != nil {
+		// error creating task
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, task)
+		return
+	}
+	// success
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created task!")
+	views.SendHeader(w, 200, alert, task)
+	return
+}
+
+// Create is a method
+// POST /task
+func (t *Tasks) Create(w http.ResponseWriter, r *http.Request) {
+	var form taskForm
+	if err := parseForm(r, &form); err != nil {
+		log.Println(err)
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, form)
+		return
+	}
+	task := models.Task{
+		Title: form.Title,
+	}
+	if err := t.ts.Create(&task); err != nil {
+		// error creating task
+		log.Println(err)
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, task)
+		return
+	}
+	// success
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created task!")
+	views.SendHeader(w, 200, alert, task)
 	return
 }
 
 // Update is a method
-// PUT /posts/:id
-func (p *Posts) Update(w http.ResponseWriter, r *http.Request) {
-	post, err := p.postByID(w, r)
+// PUT /tasks/:id
+func (t *Tasks) Update(w http.ResponseWriter, r *http.Request) {
+	task, err := t.taskByID(w, r)
 	if err != nil {
 		return
 	}
-
-	user := context.User(r.Context())
-	if post.UserID != user.ID {
-		// user ids dont match, so send header where resource is not found
-		return
-	}
-	var form postForm
+	var form taskForm
 	if err := parseForm(r, &form); err != nil {
 		// error parseing form
 		log.Println(err)
@@ -89,55 +178,67 @@ func (p *Posts) Update(w http.ResponseWriter, r *http.Request) {
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
-
-	post.Title = form.Title
+	task.Title = form.Title
 	// call team service
-	err = p.ps.Update(post)
+	err = t.ts.Update(task)
 	if err != nil {
 		// error updating the form
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, post)
+		views.SendHeader(w, 500, alert, task)
 		return
 	}
-	alert := views.AlertError(views.AlertLvlSuccess, "Post successfully updated!")
-	views.SendHeader(w, 500, alert, post)
+	alert := views.AlertError(views.AlertLvlSuccess, "Task successfully updated!")
+	views.SendHeader(w, 500, alert, task)
 	return
 
 }
-
 
 // Delete is a method
-// DELETE /posts/:id
-func (p *Posts) Delete(w http.ResponseWriter, r *http.Request) {
-	post, err := p.postByID(w, r)
+// DELETE /tasks/:id
+func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	err = t.ts.Delete(id)
 	if err != nil {
-		return
-	}
-
-	user := context.User(r.Context())
-	if post.UserID != user.ID {
-		// TODO: user ids dont match, so send header where resource is not found
-		return
-	}
-	err = p.ps.Delete(post.UserID)
-	if err != nil {
-		// error deleteing post
+		// error deleteing task
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, post)
+		views.SendHeader(w, 500, alert, idStr)
 		return
 	}
-
-	alert := views.AlertError(views.AlertLvlSuccess, "Successfully deleted post!")
-	views.SendHeader(w, 200, alert, post)
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully deleted task!")
+	views.SendHeader(w, 200, alert, id)
 	return
 
 }
 
-func (p *Posts) postByID(w http.ResponseWriter, r *http.Request) (*models.Post, error) {
+// MarkDone is a method
+// PUT /task/done/:id
+func (t *Tasks) MarkDone(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	idStr := vars["id"]
-	team, err := p.ps.ByID(idStr)
+	id, err := strconv.Atoi(idStr)
+	err = t.ts.MarkDone(id)
 	if err != nil {
+		// error deleteing task
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, idStr)
+		return
+	}
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully deleted task!")
+	views.SendHeader(w, 200, alert, id)
+	return
+
+}
+
+func (t *Tasks) taskByID(w http.ResponseWriter, r *http.Request) (*models.Task, error) {
+	vars := mux.Vars(r)
+	log.Println(vars)
+	idStr := vars["id"]
+	task, err := t.ts.ByID(idStr)
+	log.Println(idStr)
+	if err != nil {
+		log.Println(err)
 		switch err {
 		case models.ErrNotFound:
 			// render header for not found, http.StatusNotFound
@@ -146,5 +247,5 @@ func (p *Posts) postByID(w http.ResponseWriter, r *http.Request) (*models.Post, 
 		}
 		return nil, err
 	}
-	return team, nil
+	return task, nil
 }

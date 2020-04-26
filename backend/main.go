@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 	"todo/controllers"
 	"todo/models"
@@ -33,7 +32,7 @@ func main() {
 
 	// Toggle these to destroy or rebuild the db!
 	// services.DestructiveReset()
-	// services.AutoMigrate()
+	// services.Rebuilder()
 
 	r := mux.NewRouter()
 	// declare controllers
@@ -45,6 +44,7 @@ func main() {
 	r.HandleFunc("/api/tasks", tasksC.All).Methods("GET")
 	r.HandleFunc("/api/task", tasksC.Create).Methods("POST").Name(controllers.TaskCreateName)
 	r.HandleFunc("/api/task/{id}", tasksC.Edit).Methods("PUT").Name(controllers.TaskEditName)
+	r.HandleFunc("/api/task/done/{id}", tasksC.MarkDone).Methods("PUT")
 	r.HandleFunc("/api/task/{id}", tasksC.Delete).Methods("DELETE").Name(controllers.TaskDeleteName)
 	r.HandleFunc("/api/task/{id}", tasksC.ByID).Methods("GET")
 	r.HandleFunc("/api/tasks/{name}", tasksC.ByName).Methods("GET")
