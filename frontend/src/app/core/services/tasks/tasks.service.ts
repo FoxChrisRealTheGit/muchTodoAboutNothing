@@ -1,18 +1,16 @@
 /* Angular imports */
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   HttpClient,
-  HttpHeaders,
-  HttpErrorResponse
 } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { Observable } from "rxjs";
 /* Service imports */
 import { SnackbarService } from "../snackbar/snackbar.service";
-import { FormMakerService } from "../../core/services/utility/system/form-maker.service";
+import { FormMakerService } from "../utility/system/form-maker.service";
 /* Interface imports */
 import { ITask } from "../../interfaces/task/task.model";
-import { APIResponse } from "../../interfaces/responses/response.model";
+import { APIResponse, APIListResponse } from "../../interfaces/responses/response.model";
 
 /* Environment import */
 import { ENVIRONMENT } from "../../../../environments/environment";
@@ -22,18 +20,17 @@ import { ENVIRONMENT } from "../../../../environments/environment";
  */
 @Injectable()
 export class TaskService {
-  selfTasks = [];     // global storage item for user Task
   allTasks = [];      // global storage item for all of the Tasks
-  allUserTasks = [];  // global storage item for specific user Task
-  allTopicTasks = []; // global storage item for specific topic Tasks
 
   singleTask;         // global storage for a single Task
+  index: number;              // global storage for a single Task's index
 
 
   constructor(
     private http: HttpClient,
     private snackBar: SnackbarService,
-    private formmaker: FormMakerService
+    private formmaker: FormMakerService,
+    private router: Router
   ) { }
 
 
@@ -42,7 +39,7 @@ export class TaskService {
    *  it gets all Tasks
    */
   GetAll = () => {
-    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/all-Tasks`).subscribe(data => {
+    return this.http.get<APIListResponse>(`${ENVIRONMENT.apiUrl}/tasks`).subscribe(data => {
       this.allTasks = data.response;
     });
   } // end GetAllTasks
@@ -53,11 +50,10 @@ export class TaskService {
    * @param id : number - the id of the Task to get
    */
   FetchByID = (id: number) => {
-    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/Task/single/${id}`).subscribe(data => {
+    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/task/${id}`).subscribe(data => {
       this.singleTask = data.response;
     });
   } // end GetTaskByID
-
 
   /**
    * POST One Task
@@ -66,9 +62,14 @@ export class TaskService {
   Create = (newTask) => {
     // make the body so the backend can parse
     const FORMBODY = this.formmaker.makeForm(newTask);
-    // call the snackBar to update view experience and check for levelup
-    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/Task`, FORMBODY).subscribe(data => {
-      this.selfTasks.unshift(data.response);
+
+    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/task`, FORMBODY, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe(data => {
+      this.allTasks.unshift(data.response);
+      this.snackBar.GeneralMessageSnack("Successfully made task!");
     });
   } // end of PostTask
 
@@ -76,27 +77,48 @@ export class TaskService {
   /**
    * PUT One Task
    * @param id - the id of the Task
-   * @param Task - the Task
+   * @param task - the Task
    */
-  Update = (id, Task): Observable<void> => {
-    this.snackBar.GeneralMessageSnack("Task has been edited!");
-    return this.http.put<void>(`${ENVIRONMENT.apiUrl}/Task/single/${id}`, Task);
+  Update = (id, task) => {
+    const FORMBODY = this.formmaker.makeForm(task);
+    return this.http.put<APIResponse>(`${ENVIRONMENT.apiUrl}/task/${id}`, FORMBODY, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe(data => {
+      this.allTasks[this.index] = data.response;
+      this.router.navigate(["/"]);
+      this.snackBar.GeneralMessageSnack("Task has been edited!");
+    });
   } // end of PutTask
-
+  /**
+   * Mark the task as done
+   * @param TaskID : number - the id of the Task
+   */
+  MarkDone = (TaskID, index) => {
+    this.allTasks[index].done = true;
+    this.snackBar.GeneralMessageSnack("Task has marked as done!");
+    return this.http.put(`${ENVIRONMENT.apiUrl}/task/done/${TaskID}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe();
+  } // end of DeleteTask
 
   /**
    * DELETE One Task
    * @param TaskID : number - the id of the Task
    */
-  Delete = (TaskID: number): Observable<void> => {
+  Delete = (TaskID, index) => {
+    this.allTasks.splice(index, 1);
     this.snackBar.GeneralMessageSnack("Task has been deleted!");
-    return this.http.delete<void>(`${ENVIRONMENT.apiUrl}/Task/single/${TaskID}`);
+    return this.http.delete(`${ENVIRONMENT.apiUrl}/task/${TaskID}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe();
   } // end of DeleteTask
 
+  /* PUT OTHER METHODS HERE */
 
-  //  private handleHttpError(error: HttpErrorResponse): Observable<IError>{
-  //    let dataError = new IError();
-
-  //    return throwError(dataError)
-  //  }
-
+} // end of Service

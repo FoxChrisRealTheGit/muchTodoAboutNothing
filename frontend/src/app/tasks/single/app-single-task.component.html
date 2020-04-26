@@ -1,1 +1,43 @@
-<h2>Single Task</h2>
+<h2 class="title title--center">Single Task</h2>
+<div class="holder holder--center holder--w-500">
+  <form
+    [formGroup]="firstFormGroup"
+    class="holder holder--dis-col"
+    style="width: 100%;"
+  >
+    <mat-form-field class="form--w-full">
+      <input
+        matInput
+        formControlName="title"
+        placeholder="Task Title (Required)"
+      />
+    </mat-form-field>
+    <mat-form-field class="form--w-full">
+      <textarea
+        matInput
+        formControlName="info"
+        placeholder="Add some info..."
+      ></textarea>
+    </mat-form-field>
+
+    <div class="holder holder--j-center">
+      <button
+        mat-button
+        color="primary"
+        [disabled]="!firstFormGroup.valid"
+        (click)="onHandleUpdate()"
+        class="holder--center"
+      >
+        Update
+      </button>
+      <button
+        mat-button
+        color="primary"
+        class="holder--center"
+        [routerLink]="['/']"
+      >
+        Back
+      </button>
+    </div>
+  </form>
+</div>
