@@ -28,7 +28,7 @@ export class TaskComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
-      title: ["", [Validators.required, Validators.maxLength(75)]],
+      title: ["", [Validators.required, Validators.maxLength(64)]],
     });
 
     this.taskService.GetAll();

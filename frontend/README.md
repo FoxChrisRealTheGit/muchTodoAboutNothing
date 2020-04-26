@@ -5,7 +5,7 @@
 
 in development when using the backend, run 
 ```
-npm run dev.
+npm run dev
 ```  
 
 

@@ -24,8 +24,8 @@ export class SingleTaskComponent implements OnInit {
 
   ngOnInit() {
     this.firstFormGroup = this.fb.group({
-      title: [this.taskService.singleTask.title, Validators.required],
-      info: [this.taskService.singleTask.info]
+      title: [this.taskService.singleTask.title, [Validators.required, Validators.maxLength(64)]],
+      info: [this.taskService.singleTask.info, Validators.maxLength(1024)]
     });
 
   }

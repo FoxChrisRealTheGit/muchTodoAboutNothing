@@ -47,7 +47,7 @@
 }
 
 .holder--w-500{
-  width: 500px
+  width: 90%;
 }
 
 .holder--w-booklike {
@@ -223,6 +223,9 @@
   position: absolute;
 }
 @media screen and (min-width: 700px) {
+  .holder--w-500{
+    width: 500px
+  }
   .holder__sidebar {
     position: fixed;
     flex-direction: column;
