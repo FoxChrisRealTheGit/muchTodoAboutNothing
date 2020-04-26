@@ -8,13 +8,12 @@ const (
 	ErrNotFound modelError = "models: resource not found"
 	
 	ErrTaskTitleRequired modelError = "models: title is required"
-
+	ErrTaskTitleTooLong modelError = "models: title must be less than 64 characters"
+	ErrTaskInfoTooLong modelError = "models: info must be less than 1024 characters"
 	// ErrIDInvalid is returned when an invalid ID is provided
 	// to a method like Delete
 	ErrIDInvalid        privateError = "models: ID provided was invalid"
-	ErrRememberTooShort privateError = "models: Remember token must be at least 32 bytes"
-	ErrRememberRequired privateError = "models: remember token is required"
-	ErrUserIDRequired   privateError = "models: user ID is required"
+	
 )
 
 type modelError string

@@ -8,6 +8,8 @@ refer to the Readme's in the backend and the frontend to run locally
 
 
 # Still @TODO
+- add unit tests
+- fix responsive behavior for below 480px
 - use better code patterns
 - add auth
 - makes lists for day/week/month
