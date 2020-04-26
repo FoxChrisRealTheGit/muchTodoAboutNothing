@@ -35,7 +35,7 @@ func main() {
 	defer services.Close()
 
 	// Toggle these to destroy or rebuild the db!
-	// services.DestructiveReset()
+	services.DestructiveReset()
 	// services.Rebuilder()
 
 	r := mux.NewRouter()
