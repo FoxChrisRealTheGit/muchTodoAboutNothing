@@ -1,5 +1,6 @@
 /* Angular imports */
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import {
   HttpClient,
 } from "@angular/common/http";
@@ -22,12 +23,14 @@ export class TaskService {
   allTasks = [];      // global storage item for all of the Tasks
 
   singleTask;         // global storage for a single Task
+  index: number;              // global storage for a single Task's index
 
 
   constructor(
     private http: HttpClient,
     private snackBar: SnackbarService,
-    private formmaker: FormMakerService
+    private formmaker: FormMakerService,
+    private router: Router
   ) { }
 
 
@@ -59,15 +62,13 @@ export class TaskService {
   Create = (newTask) => {
     // make the body so the backend can parse
     const FORMBODY = this.formmaker.makeForm(newTask);
-    this.allTasks.unshift(newTask);
-    console.log(FORMBODY)
+
     return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/task`, FORMBODY, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
     }).subscribe(data => {
-      console.log(data);
-      this.allTasks[0].id = data.response.id;
+      this.allTasks.unshift(data.response);
       this.snackBar.GeneralMessageSnack("Successfully made task!");
     });
   } // end of PostTask
@@ -76,11 +77,19 @@ export class TaskService {
   /**
    * PUT One Task
    * @param id - the id of the Task
-   * @param Task - the Task
+   * @param task - the Task
    */
-  Update = (id, Task): Observable<void> => {
-    this.snackBar.GeneralMessageSnack("Task has been edited!");
-    return this.http.put<void>(`${ENVIRONMENT.apiUrl}/task/${id}`, Task);
+  Update = (id, task) => {
+    const FORMBODY = this.formmaker.makeForm(task);
+    return this.http.put<APIResponse>(`${ENVIRONMENT.apiUrl}/task/${id}`, FORMBODY, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe(data => {
+      this.allTasks[this.index] = data.response;
+      this.router.navigate(["/"]);
+      this.snackBar.GeneralMessageSnack("Task has been edited!");
+    });
   } // end of PutTask
   /**
    * Mark the task as done

@@ -204,7 +204,8 @@ func (tsql *taskSQL) Update(task *Task) error {
 	query := `
 		UPDATE tasks
 		SET title = $2,
-			info = $3 
+			info = $3,
+			done = false
 		WHERE id = $1`
 	//Delete
 	_, err := tsql.db.Exec(query, task.ID, task.Title, task.Info)

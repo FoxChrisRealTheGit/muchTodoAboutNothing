@@ -36,8 +36,9 @@ type Tasks struct {
 }
 
 type taskForm struct {
-	ID    int    `schema:"id"`
+	ID    string    `schema:"id"`
 	Title string `schema:"title"`
+	Info  string `schema:"info"`
 }
 
 // All is a method
@@ -67,10 +68,13 @@ func (t *Tasks) Edit(w http.ResponseWriter, r *http.Request) {
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
+	id, _ := strconv.Atoi(form.ID)
 	task := models.Task{
+		ID:    id,
 		Title: form.Title,
+		Info:  form.Info,
 	}
-	if err := t.ts.Create(&task); err != nil {
+	if err := t.ts.Update(&task); err != nil {
 		// error creating task
 		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
@@ -78,7 +82,7 @@ func (t *Tasks) Edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// success
-	alert := views.AlertError(views.AlertLvlSuccess, "Successfully created task!")
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully updated task!")
 	views.SendHeader(w, 200, alert, task)
 	return
 }
@@ -143,12 +147,10 @@ func (t *Tasks) Create(w http.ResponseWriter, r *http.Request) {
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
-	log.Println(form)
 	task := models.Task{
 		Title: form.Title,
 	}
 	if err := t.ts.Create(&task); err != nil {
-		log.Println(&task)
 		// error creating task
 		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
@@ -209,7 +211,6 @@ func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
 	return
 
 }
-
 
 // MarkDone is a method
 // PUT /task/done/:id

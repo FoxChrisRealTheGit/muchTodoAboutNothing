@@ -38,7 +38,7 @@
     <button
       mat-button
       color="accent"
-      [disabled]="task.done"
+      (click)="onHandleEdit(task, i)"
       [routerLink]="['/task', task.id]"
     >
       Edit
@@ -49,10 +49,11 @@
   </div>
 </ng-container>
 <!-- start of pagination buttons-->
-<nav *ngIf="paginationService.pages.length >= 1">
+<nav *ngIf="paginationService.pages.length >= 1" class="holder holder--a-center holder--j-center">
   <ul class="holder holder--j-center pagination--row">
-    <li class="" style="margin-right: 12px;">
+    <li  class="holder holder--a-center" style="margin-right: 12px;">
       <button
+      mat-button
         class="button__pagination button__pagination--active"
         (click)="paginationService.page = 1"
         style="width: 100%;"
@@ -60,8 +61,9 @@
         FIRST
       </button>
     </li>
-    <li class="">
+    <li class="holder holder--a-center">
       <button
+      mat-button
         class="button__pagination--button"
         (click)="
           paginationService.page === 1
@@ -74,11 +76,12 @@
         >
       </button>
     </li>
-    <li class="">
+    <li  class="holder holder--a-center">
       <button
+      mat-button
         [class]="
           paginationService.page === pageNumber
-            ? 'button__pagination--active'
+            ? 'active'
             : ''
         "
         class="button__pagination"
@@ -103,8 +106,9 @@
       </button>
     </li>
 
-    <li class="">
+    <li  class="holder holder--a-center">
       <button
+      mat-button
         class="button__pagination--button"
         (click)="
           paginationService.page === paginationService.pages.length
@@ -116,8 +120,9 @@
         <mat-icon class="button__pagination--icon">arrow_forward_ios</mat-icon>
       </button>
     </li>
-    <li class="" style="margin-left: 12px;">
+    <li  class="holder holder--a-center" style="margin-left: 12px;">
       <button
+      mat-button
         class="button__pagination button__pagination--active"
         (click)="paginationService.page = paginationService.pages.length"
       >

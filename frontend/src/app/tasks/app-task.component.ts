@@ -56,12 +56,31 @@ export class TaskComponent implements OnInit {
 
   /**
    *
-   * @param id
+   * @param id - the id of the task to complete
    */
   onHandleComplete(id, index) {
+    if (this.paginationService.page > 1) {
+      index += (10 * (this.paginationService.page - 1));
+    }
+    if (this.taskService.allTasks[index].done) {
+      return;
+    }
+
     this.taskService.MarkDone(id, index);
   } // end of onHandleComplete
 
+
+  /**
+   *
+   * @param id - the ide of the task to edit
+   */
+  onHandleEdit(task, i) {
+    if (this.paginationService.page > 1) {
+      i += (10 * (this.paginationService.page - 1));
+    }
+    this.taskService.index = i;
+    this.taskService.singleTask = task;
+  } // end of onHandleComplete
   /* PUT OTHER METHODS HERE*/
 
 } // end of class

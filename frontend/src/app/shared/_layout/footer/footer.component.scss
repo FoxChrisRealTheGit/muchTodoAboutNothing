@@ -2,10 +2,15 @@ footer {
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #212121;
   padding: 20px;
   width: 100%;
+  margin-bottom: 0;
   bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 @media screen and (min-width: 316px) {
