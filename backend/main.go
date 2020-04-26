@@ -63,7 +63,7 @@ func main() {
 
 	// establishes the server contraints and information
 	srv := &http.Server{
-		Handler:      handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"http://127.0.0.1:4200"}), handlers.AllowCredentials())(r),
+		Handler:      handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"http://http://ec2-18-216-70-175.us-east-2.compute.amazonaws.com"}))(r),
 		Addr:         fmt.Sprintf(":%d", cfg.Port),
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
