@@ -5,16 +5,16 @@ import (
 	"log"
 )
 
-// Task represents the team model stored in our database
+// Task represents the task model stored in our database
 type Task struct {
-	ID    int `json:"id"`
+	ID    int    `json:"id"`
 	Title string `json:"title"`
 	Info  string `json:"info"`
 	Done  bool   `json:"done"`
 }
 
 // TaskService is a set of methods used to manipulate and
-// work with the team model
+// work with the task model
 type TaskService interface {
 	TaskDB
 }
@@ -24,9 +24,10 @@ type TaskDB interface {
 	ByID(id string) (*Task, error)
 	ByName(name string) ([]Task, error)
 	All() ([]Task, error)
-	Create(task *Task)  error
-	Update(team *Task) error
-	Delete(id string) error
+	Create(task *Task) error
+	Update(task *Task) error
+	MarkDone(id int) error
+	Delete(id int) error
 }
 
 // NewTaskService is the service for tasks
@@ -44,10 +45,10 @@ type taskValidator struct {
 	TaskDB
 }
 
-func (tv *taskValidator) Create(p *Task)  error {
+func (tv *taskValidator) Create(p *Task) error {
 	if err := runTaskValFuncs(p,
 		tv.titleRequired); err != nil {
-		return  err
+		return err
 	}
 
 	return tv.TaskDB.Create(p)
@@ -63,8 +64,8 @@ func (tv *taskValidator) Update(p *Task) error {
 }
 
 // Delete will delete the user with the provided ID
-func (tv *taskValidator) Delete(id string) error {
-	if id == "" {
+func (tv *taskValidator) Delete(id int) error {
+	if id <= 0 {
 		return ErrIDInvalid
 	}
 	return tv.TaskDB.Delete(id)
@@ -109,7 +110,7 @@ func (tsql *taskSQL) ByID(id string) (*Task, error) {
 		SELECT 
 			id, 
 			title,
-			info,
+			COALESCE(info, ''),
 			done 
 		FROM tasks
 		WHERE id=$1;`
@@ -153,13 +154,13 @@ func (tsql *taskSQL) ByName(name string) ([]Task, error) {
 func (tsql *taskSQL) All() ([]Task, error) {
 	var tasks []Task
 	// do the sql
-	query := `SELECT id, title FROM tasks;`
+	query := `SELECT id, title, done FROM tasks;`
 	rows, err := tsql.db.Query(query)
 	defer rows.Close()
 	for rows.Next() {
 		var b Task
 
-		err := rows.Scan(&b.ID, &b.Title)
+		err := rows.Scan(&b.ID, &b.Title, &b.Done)
 
 		if err == nil {
 			tasks = append(tasks, b)
@@ -179,7 +180,7 @@ func (tsql *taskSQL) All() ([]Task, error) {
 
 // Create will create the provided task and backfill data
 // like the ID, CreatedAt, and UpdatedAt fields
-func (tsql *taskSQL) Create(task *Task)  error {
+func (tsql *taskSQL) Create(task *Task) error {
 	query := `
 		INSERT INTO tasks
 		(title)
@@ -189,6 +190,7 @@ func (tsql *taskSQL) Create(task *Task)  error {
 	var ID int
 	err := tsql.db.QueryRow(query, task.Title).Scan(&ID)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	// assign ID to task
@@ -213,13 +215,29 @@ func (tsql *taskSQL) Update(task *Task) error {
 	return err
 }
 
+// MarkDone will update the provided task
+func (tsql *taskSQL) MarkDone(id int) error {
+	query := `
+		UPDATE tasks
+		SET done = true
+		WHERE id = $1`
+	//Delete
+	_, err := tsql.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
 // Delete will delete the provided task
-func (tsql *taskSQL) Delete(id string) error {
-	query := `DELETE from tasks 
+func (tsql *taskSQL) Delete(id int) error {
+	query := `DELETE FROM tasks 
 	WHERE id = $1`
 	//Delete
 	_, err := tsql.db.Exec(query, id)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 

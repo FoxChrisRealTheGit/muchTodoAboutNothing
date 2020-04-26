@@ -4,6 +4,17 @@ export interface APIResponse {
     message?: string
   };
   response?: {
-    ID?: string
+    id?: number,
+    title?: string,
+    info?: string,
+    done?: boolean
   };
+}
+
+export interface APIListResponse {
+  error?: {
+    level?: string,
+    message?: string
+  };
+  response?: any[]
 }

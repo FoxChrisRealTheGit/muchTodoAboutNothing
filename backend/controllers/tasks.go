@@ -3,6 +3,7 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"todo/models"
 	"todo/views"
 
@@ -35,6 +36,7 @@ type Tasks struct {
 }
 
 type taskForm struct {
+	ID    int    `schema:"id"`
 	Title string `schema:"title"`
 }
 
@@ -70,6 +72,7 @@ func (t *Tasks) Edit(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := t.ts.Create(&task); err != nil {
 		// error creating task
+		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
 		views.SendHeader(w, 500, alert, task)
 		return
@@ -140,11 +143,14 @@ func (t *Tasks) Create(w http.ResponseWriter, r *http.Request) {
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
+	log.Println(form)
 	task := models.Task{
 		Title: form.Title,
 	}
 	if err := t.ts.Create(&task); err != nil {
+		log.Println(&task)
 		// error creating task
+		log.Println(err)
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
 		views.SendHeader(w, 500, alert, task)
 		return
@@ -170,7 +176,6 @@ func (t *Tasks) Update(w http.ResponseWriter, r *http.Request) {
 		views.SendHeader(w, 500, alert, form)
 		return
 	}
-
 	task.Title = form.Title
 	// call team service
 	err = t.ts.Update(task)
@@ -189,29 +194,50 @@ func (t *Tasks) Update(w http.ResponseWriter, r *http.Request) {
 // Delete is a method
 // DELETE /tasks/:id
 func (t *Tasks) Delete(w http.ResponseWriter, r *http.Request) {
-	task, err := t.taskByID(w, r)
-	if err != nil {
-		return
-	}
-	err = t.ts.Delete("something")
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	err = t.ts.Delete(id)
 	if err != nil {
 		// error deleteing task
 		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
-		views.SendHeader(w, 500, alert, task)
+		views.SendHeader(w, 500, alert, idStr)
 		return
 	}
-
 	alert := views.AlertError(views.AlertLvlSuccess, "Successfully deleted task!")
-	views.SendHeader(w, 200, alert, task)
+	views.SendHeader(w, 200, alert, id)
+	return
+
+}
+
+
+// MarkDone is a method
+// PUT /task/done/:id
+func (t *Tasks) MarkDone(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	err = t.ts.MarkDone(id)
+	if err != nil {
+		// error deleteing task
+		alert := views.AlertError(views.AlertLvlError, views.AlertMsgGeneric)
+		views.SendHeader(w, 500, alert, idStr)
+		return
+	}
+	alert := views.AlertError(views.AlertLvlSuccess, "Successfully deleted task!")
+	views.SendHeader(w, 200, alert, id)
 	return
 
 }
 
 func (t *Tasks) taskByID(w http.ResponseWriter, r *http.Request) (*models.Task, error) {
 	vars := mux.Vars(r)
+	log.Println(vars)
 	idStr := vars["id"]
 	task, err := t.ts.ByID(idStr)
+	log.Println(idStr)
 	if err != nil {
+		log.Println(err)
 		switch err {
 		case models.ErrNotFound:
 			// render header for not found, http.StatusNotFound

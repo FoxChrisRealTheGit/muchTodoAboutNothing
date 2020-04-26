@@ -44,6 +44,7 @@ func main() {
 	r.HandleFunc("/api/tasks", tasksC.All).Methods("GET")
 	r.HandleFunc("/api/task", tasksC.Create).Methods("POST").Name(controllers.TaskCreateName)
 	r.HandleFunc("/api/task/{id}", tasksC.Edit).Methods("PUT").Name(controllers.TaskEditName)
+	r.HandleFunc("/api/task/done/{id}", tasksC.MarkDone).Methods("PUT")
 	r.HandleFunc("/api/task/{id}", tasksC.Delete).Methods("DELETE").Name(controllers.TaskDeleteName)
 	r.HandleFunc("/api/task/{id}", tasksC.ByID).Methods("GET")
 	r.HandleFunc("/api/tasks/{name}", tasksC.ByName).Methods("GET")

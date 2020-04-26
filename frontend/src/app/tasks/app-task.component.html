@@ -15,8 +15,7 @@
     <button
       mat-button
       color="primary"
-      [disabled]="
-    !firstFormGroup.valid"
+      [disabled]="!firstFormGroup.valid"
       (click)="onHandleSubmit()"
     >
       DO IT!
@@ -31,13 +30,20 @@
   "
 >
   <div class="holder holder--center holder--a-center holder--j-center">
-    <mat-checkbox>
-      <h4 class="task__title">{{ task.title }}</h4></mat-checkbox
+    <mat-checkbox [ngModel]="task.done" [disabled]="task.done">
+      <h4 class="task__title" (click)="onHandleComplete(task.id, i)">
+        {{ task.title }}
+      </h4></mat-checkbox
     >
-    <button mat-button color="accent" [routerLink]="['/task', task.id]">
+    <button
+      mat-button
+      color="accent"
+      [disabled]="task.done"
+      [routerLink]="['/task', task.id]"
+    >
       Edit
     </button>
-    <button mat-button color="warn" (click)="onHandleDelete(task, i)">
+    <button mat-button color="warn" (click)="onHandleDelete(task.id, i)">
       Delete
     </button>
   </div>

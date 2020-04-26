@@ -30,6 +30,8 @@ export class TaskComponent implements OnInit {
     this.firstFormGroup = this.fb.group({
       title: ["", [Validators.required, Validators.maxLength(75)]],
     });
+
+    this.taskService.GetAll();
   } // end of ngOnInit
 
   /**
@@ -47,9 +49,19 @@ export class TaskComponent implements OnInit {
    *
    * @param index - the index of the item to delete
    */
-  onHandleDelete(task, index) {
-    this.taskService.Delete(task, index);
+  onHandleDelete(id, index) {
+    this.taskService.Delete(id, index);
   } // end of onHandleSubmit
+
+
+  /**
+   *
+   * @param id
+   */
+  onHandleComplete(id, index) {
+    this.taskService.MarkDone(id, index);
+  } // end of onHandleComplete
+
   /* PUT OTHER METHODS HERE*/
 
 } // end of class

@@ -9,7 +9,7 @@ import { SnackbarService } from "../snackbar/snackbar.service";
 import { FormMakerService } from "../utility/system/form-maker.service";
 /* Interface imports */
 import { ITask } from "../../interfaces/task/task.model";
-import { APIResponse } from "../../interfaces/responses/response.model";
+import { APIResponse, APIListResponse } from "../../interfaces/responses/response.model";
 
 /* Environment import */
 import { ENVIRONMENT } from "../../../../environments/environment";
@@ -36,8 +36,8 @@ export class TaskService {
    *  it gets all Tasks
    */
   GetAll = () => {
-    return this.http.get<APIResponse>(`${ENVIRONMENT.apiUrl}/tasks`).subscribe(data => {
-      // this.allTasks = data.response;
+    return this.http.get<APIListResponse>(`${ENVIRONMENT.apiUrl}/tasks`).subscribe(data => {
+      this.allTasks = data.response;
     });
   } // end GetAllTasks
 
@@ -52,7 +52,6 @@ export class TaskService {
     });
   } // end GetTaskByID
 
-
   /**
    * POST One Task
    * @param newTask - the Task to post
@@ -61,11 +60,14 @@ export class TaskService {
     // make the body so the backend can parse
     const FORMBODY = this.formmaker.makeForm(newTask);
     this.allTasks.unshift(newTask);
-    console.log(this.allTasks);
-
-    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/task`, FORMBODY).subscribe(data => {
-      console.log(data.response)
-      this.allTasks[0].ID = data.response.ID;
+    console.log(FORMBODY)
+    return this.http.post<APIResponse>(`${ENVIRONMENT.apiUrl}/task`, FORMBODY, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe(data => {
+      console.log(data);
+      this.allTasks[0].id = data.response.id;
       this.snackBar.GeneralMessageSnack("Successfully made task!");
     });
   } // end of PostTask
@@ -80,17 +82,32 @@ export class TaskService {
     this.snackBar.GeneralMessageSnack("Task has been edited!");
     return this.http.put<void>(`${ENVIRONMENT.apiUrl}/task/${id}`, Task);
   } // end of PutTask
-
+  /**
+   * Mark the task as done
+   * @param TaskID : number - the id of the Task
+   */
+  MarkDone = (TaskID, index) => {
+    this.allTasks[index].done = true;
+    this.snackBar.GeneralMessageSnack("Task has marked as done!");
+    return this.http.put(`${ENVIRONMENT.apiUrl}/task/done/${TaskID}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe();
+  } // end of DeleteTask
 
   /**
    * DELETE One Task
    * @param TaskID : number - the id of the Task
    */
-  Delete = (TaskID: number, index): Observable<void> => {
-    console.log(index)
+  Delete = (TaskID, index) => {
     this.allTasks.splice(index, 1);
     this.snackBar.GeneralMessageSnack("Task has been deleted!");
-    return this.http.delete<void>(`${ENVIRONMENT.apiUrl}/task/${TaskID}`);
+    return this.http.delete(`${ENVIRONMENT.apiUrl}/task/${TaskID}`, {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+    }).subscribe();
   } // end of DeleteTask
 
   /* PUT OTHER METHODS HERE */
